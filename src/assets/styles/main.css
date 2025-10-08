@@ -1,0 +1,172 @@
+/* ===== LOGIN PAGE STYLES ===== */
+/* Import the fonts from your old project */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --bg-light: #EFF2F9;
+  --bg-card: #E4EBF1;
+  --gray-1: #B5BFC6;
+  --gray-2: #6E7F8D;
+  --text-dark: #2A3646;
+  --primary-color: #4a90e2;
+  
+  --shadow-raise: -4px -4px 8px rgba(255, 255, 255, 0.8),
+                  6px 6px 12px rgba(16, 27, 29, 0.15);
+  --shadow-press: inset -3px -3px 6px rgba(255, 255, 255, 0.7),
+                  inset 3px 3px 6px rgba(16, 27, 29, 0.1);
+
+  --font-title: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+.login-promo {
+  width: 50%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--text-dark) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.login-promo h1 {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.login-promo p {
+  font-size: 1.2rem;
+  max-width: 400px;
+  font-family: var(--font-body);
+}
+
+.login-form-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-light);
+}
+
+.login-card {
+  background: #FFFFFF;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-raise);
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-2px);
+}
+
+.login-card h2 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--text-dark);
+  text-align: left;
+  font-weight: 600;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--gray-2);
+  font-family: var(--font-body);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-1);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-raise);
+}
+
+.login-button:hover {
+  background-color: #3a7ac2;
+  transform: translateY(-1px);
+}
+
+.login-button:active {
+  box-shadow: var(--shadow-press);
+  transform: translateY(0);
+}
+
+.recovery-toggle {
+  margin-top: 1.5rem;
+  color: var(--primary-color);
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.recovery-toggle:hover {
+  color: #3a7ac2;
+  text-decoration: underline;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .login-promo {
+    display: none; /* Hide the promo section on small screens */
+  }
+
+  .login-form-container {
+    width: 100%;
+  }
+
+  .login-card {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
