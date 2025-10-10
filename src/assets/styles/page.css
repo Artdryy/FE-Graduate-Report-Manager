@@ -1,0 +1,63 @@
+/* src/assets/styles/page.css */
+
+.page-container {
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bg-card);
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-family: var(--font-title);
+}
+
+/* SEARCH BAR STYLES - UPDATED */
+.search-container {
+  margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid var(--gray-1);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  max-width: 400px;
+}
+
+.search-bar:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+.search-bar i {
+  color: var(--gray-2);
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  color: var(--text-dark);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+}
+
+.search-bar input::placeholder {
+  color: var(--gray-2);
+}

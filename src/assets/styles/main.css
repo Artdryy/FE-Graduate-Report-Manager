@@ -1,6 +1,12 @@
 /* ===== LOGIN PAGE STYLES ===== */
 /* Import the fonts from your old project */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
+@import './layout.css';
+@import './page.css';
+@import './data-table.css';
+@import './modal.css';    
+@import './buttons.css'; 
+@import './switch.css';
 
 :root {
   --bg-light: #EFF2F9;
@@ -9,6 +15,9 @@
   --gray-2: #6E7F8D;
   --text-dark: #2A3646;
   --primary-color: #4a90e2;
+
+  /* ADD THIS VARIABLE */
+  --topbar-height: 4rem;
   
   --shadow-raise: -4px -4px 8px rgba(255, 255, 255, 0.8),
                   6px 6px 12px rgba(16, 27, 29, 0.15);
@@ -17,6 +26,24 @@
 
   --font-title: 'Poppins', sans-serif;
   --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-light);
+  height: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .login-container {

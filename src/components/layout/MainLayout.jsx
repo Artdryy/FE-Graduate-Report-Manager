@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './SideBar';
+import Sidebar from './Sidebar'; // Corrected from SideBar to Sidebar
 import Topbar from './Topbar';
 
 const MainLayout = () => {

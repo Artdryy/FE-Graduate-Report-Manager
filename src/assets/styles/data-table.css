@@ -1,0 +1,70 @@
+/* src/assets/styles/data-table.css */
+.table-container {
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #eff2f9;
+  vertical-align: middle;
+}
+
+table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: var(--gray-2);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.btn-edit, .btn-delete {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin-right: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-edit {
+  background-color: #f59e0b; /* Amber 500 */
+}
+
+.btn-edit:hover {
+  background-color: #d97706; /* Amber 600 */
+}
+
+.btn-delete {
+  background-color: #ef4444; /* Red 500 */
+}
+
+.btn-delete:hover {
+  background-color: #dc2626; /* Red 600 */
+}

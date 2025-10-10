@@ -1,3 +1,5 @@
+// src/pages/LoginPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/authService';
@@ -9,20 +11,18 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // This effect should only run ONCE when the component first loads.
-    // By providing an empty dependency array [], we ensure that.
-    const token = localStorage.getItem('token');
+    // THE FIX IS HERE: Check for 'accessToken'
+    const token = localStorage.getItem('accessToken'); 
     if (token) {
       navigate('/reports'); 
     }
-  }, []); // <-- THE FIX IS HERE: Use an empty dependency array
+  }, [navigate]); // Add navigate to the dependency array
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
     try {
       await authService.login(userName, password);
-      // The redirect after a successful action belongs here.
       navigate('/reports'); 
     } catch (err) {
       const apiError = err.response?.data?.message || 'Invalid credentials or server error.';

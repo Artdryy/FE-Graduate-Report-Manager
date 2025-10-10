@@ -10,16 +10,18 @@ const Topbar = () => {
     navigate('/login');
   };
 
+  const openProfile = () => {
+    // This can be expanded later to open a dropdown menu
+    console.log('Profile icon clicked. Logging out.');
+    handleLogout();
+  };
+
   return (
     <header className="topbar">
-      {/* Placeholder for future search bar */}
-      <div className="search-container">
-          {/* We can build the search component here later */}
-      </div>
       <div className="topbar-right">
-        <button onClick={handleLogout} className="logout-button">
-          Logout
-        </button>
+        <div className="profile-btn" onClick={openProfile} title="Perfil / Salir">
+          <i className="fas fa-user-circle"></i>
+        </div>
       </div>
     </header>
   );
