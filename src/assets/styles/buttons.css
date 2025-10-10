@@ -35,3 +35,22 @@
   background: var(--bg-light);
   border-color: var(--gray-2);
 }
+
+.btn-pdf {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+  margin-right: 8px;
+}
+
+.btn-pdf:hover {
+  background-color: #2980b9;
+}

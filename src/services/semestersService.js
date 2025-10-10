@@ -2,7 +2,8 @@ import apiClient from '../api/axiosConfig';
 
 const getSemesters = async () => {
   try {
-    const response = await apiClient.get('/semesters/list');
+    // THE FIX IS HERE: The endpoint is '/semesters/list' (plural)
+    const response = await apiClient.get('/semesters/list'); 
     const data = response.data.data;
     return data && typeof data === 'object' ? Object.values(data) : [];
   } catch (error) {
@@ -10,7 +11,6 @@ const getSemesters = async () => {
     throw error;
   }
 };
-
 export const semestersService = {
-  getSemesters
+  getSemesters,
 };

@@ -1,4 +1,4 @@
-import apiClient from '../api/axiosConfig';
+import apiClient, { apiClientPdf } from '../api/axiosConfig';
 
 const getReports = async () => {
   try {
@@ -13,11 +13,16 @@ const getReports = async () => {
 
 const createReport = async (formData) => {
   try {
-    // For file uploads, we must use FormData and set the content type
-    const response = await apiClient.post('/reports/create', formData, {
+    // Ensure we're using FormData correctly
+    if (!(formData instanceof FormData)) {
+      throw new Error('Data must be an instance of FormData');
+    }
+
+    const response = await apiClientPdf.post('/reports/create', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+        // Let axios set the Content-Type header with boundary
+        'Content-Type': undefined
+      }
     });
     return response.data;
   } catch (error) {
