@@ -1,4 +1,3 @@
-/* src/assets/styles/modal.css */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -16,22 +15,10 @@
 .modal-content {
   background: white;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  animation: slide-down 0.3s ease-out;
-}
-
-@keyframes slide-down {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .modal-content h2 {
@@ -41,18 +28,6 @@
   font-family: var(--font-title);
   font-weight: 600;
   font-size: 1.5rem;
-}
-
-.modal-content .input-group {
-    margin-bottom: 1rem;
-}
-
-.modal-content .input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--gray-2);
-    font-size: 0.9rem;
 }
 
 .modal-input {
@@ -75,9 +50,52 @@
 
 .modal-buttons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center; /* This centers the single Guardar button */
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--bg-card);
+}
+
+/* Make the report modal wider for the new layout */
+.report-modal-wrapper .modal-content {
+  max-width: 850px; /* Increased width */
+}
+
+/* Grid layout for the form */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Vertical space between rows */
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem; /* Horizontal space between form groups */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between label and input */
+  flex: 1; /* Each group takes up equal space in a row */
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--gray-2);
+}
+
+/* Ensure the keyword display box matches other inputs */
+.keywords-display-box {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--gray-1);
+  border-radius: 8px;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  min-height: 45.6px; /* Match input height */
+  font-size: 1rem;
+  line-height: 1.2;
+  box-sizing: border-box;
 }

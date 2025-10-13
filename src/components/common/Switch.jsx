@@ -1,14 +1,19 @@
 import React from 'react';
-import '../../assets/styles/switch.css';
 
-const Switch = ({ label, checked, onChange }) => {
+const Switch = ({ label, checked, onChange, id }) => {
   return (
     <div className="switch-container">
-      <label className="switch-label">{label}</label>
-      <label className="switch">
-        <input type="checkbox" checked={checked} onChange={onChange} />
-        <span className="slider round"></span>
-      </label>
+      {}
+      {label && <label htmlFor={id} className="switch-label">{label}</label>}
+      <input
+        type="checkbox"
+        id={id} 
+        className="switch-checkbox"
+        checked={checked}
+        onChange={onChange}
+      />
+      {}
+      <label htmlFor={id} className="switch-lever"></label>
     </div>
   );
 };

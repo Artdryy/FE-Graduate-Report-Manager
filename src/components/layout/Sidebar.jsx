@@ -24,7 +24,7 @@ const Sidebar = () => {
           className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
         >
           <i className="fas fa-file-alt"></i>
-          <span>Reportes</span>
+          <span>Informes</span>
         </NavLink>
         <NavLink 
           to="/users" 

@@ -21,9 +21,9 @@ const createCompany = async (companyData) => {
   }
 };
 
-const updateCompany = async (id, companyData) => {
+const updateCompany = async (companyData) => {
   try {
-    const response = await apiClient.put(`/companies/update/${id}`, companyData);
+    const response = await apiClient.put('/companies/update', companyData);
     return response.data;
   } catch (error) {
     console.error('Error updating company:', error);

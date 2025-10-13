@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Regular API client for JSON requests
+// API principal para solicitudes JSON
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
   headers: {
@@ -8,12 +8,12 @@ const apiClient = axios.create({
   },
 });
 
-// Special API client for PDF and multipart/form-data requests
+// API especial para solicitudes PDF y multipart/form-data
 const apiClientPdf = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 });
 
-// Add token interceptor to both clients
+//  token interceptor para ambos clientes
 const addTokenInterceptor = (client) => {
   client.interceptors.request.use(
     (config) => {
@@ -29,7 +29,6 @@ const addTokenInterceptor = (client) => {
   );
 };
 
-// Apply interceptors to both clients
 addTokenInterceptor(apiClient);
 addTokenInterceptor(apiClientPdf);
 

@@ -5,12 +5,16 @@ import DataTable from '../components/common/DataTable';
 import SearchBar from '../components/common/SearchBar';
 import Modal from '../components/common/Modal';
 import RoleForm from '../components/roles/RoleForm';
+import PermissionsModal from '../components/roles/PermissionsModal';
 
 const RolesPage = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState(null);
+
+  const [isPermissionsModalOpen, setIsPermissionsModalOpen] = useState(false);
+  const [selectedRoleForPermissions, setSelectedRoleForPermissions] = useState(null);
 
   // Function to fetch and update roles
   const fetchRoles = async () => {
@@ -75,6 +79,30 @@ const RolesPage = () => {
   
   const handleSearch = (query) => console.log("Searching for:", query);
 
+  const handleOpenPermissionsModal = (role) => {
+    setSelectedRoleForPermissions(role);
+    setIsPermissionsModalOpen(true);
+  };
+
+  const handleClosePermissionsModal = () => {
+    setSelectedRoleForPermissions(null);
+    setIsPermissionsModalOpen(false);
+  };
+
+  const renderRoleActions = (role) => (
+    <>
+      <button onClick={() => handleOpenPermissionsModal(role)} className="btn-permissions" title="Permisos">
+      <i className="fas fa-key"></i>
+      </button>
+      <button onClick={() => handleEdit(role)} className="btn-edit" title="Editar">
+        <i className="fas fa-pencil-alt"></i>
+      </button>
+      <button onClick={() => handleDelete(role)} className="btn-delete" title="Eliminar">
+        <i className="fas fa-trash"></i>
+      </button>
+    </>
+  );
+
   const columns = [
     { key: 'id', label: 'ID' },
     { key: 'role_name', label: 'Nombre del Rol' },
@@ -84,13 +112,12 @@ const RolesPage = () => {
   return (
     <div className="page-container">
       <PageHeader title="Gestión de Roles" onAdd={handleAdd} />
-      <SearchBar onSearch={handleSearch} placeholder="Buscar por nombre de rol..." />
+      <SearchBar onSearch={() => {}} placeholder="Buscar por nombre de rol..." />
       <DataTable
         columns={columns}
         data={roles}
         loading={loading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        renderActions={renderRoleActions}
       />
       {isModalOpen && (
         <Modal
@@ -101,6 +128,13 @@ const RolesPage = () => {
         >
           <RoleForm role={currentRole} setRole={setCurrentRole} />
         </Modal>
+      )}
+      {isPermissionsModalOpen && (
+        <PermissionsModal
+          role={selectedRoleForPermissions}
+          onClose={handleClosePermissionsModal}
+          onSaveSuccess={handleClosePermissionsModal}
+        />
       )}
     </div>
   );

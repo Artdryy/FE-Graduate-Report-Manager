@@ -5,8 +5,9 @@ import DataTable from '../components/common/DataTable';
 import SearchBar from '../components/common/SearchBar';
 import Modal from '../components/common/Modal';
 import UserForm from '../components/users/UserForm';
+import Switch from '../components/common/Switch';
 
-const UsersPage = () => {
+  const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,14 +59,20 @@ const UsersPage = () => {
   const handleSubmit = async () => {
     try {
       if (currentUser.id) {
-        // Exclude role_name from the update payload, as the backend doesn't need it
-        const { id, role_name, ...updateData } = currentUser;
-        await usersService.updateUser(id, updateData);
+        const userDataForUpdate = {
+          user_id: currentUser.id,
+          user_name: currentUser.user_name,
+          email: currentUser.email,
+          role_id: currentUser.role_id,
+          is_active: currentUser.is_active
+        };
+        await usersService.updateUser(userDataForUpdate);
+
       } else {
         await usersService.createUser(currentUser);
       }
       handleCloseModal();
-      fetchUsers(); // Refresh the data
+      fetchUsers();
     } catch (error) {
       console.error("Failed to save user:", error);
     }
@@ -75,23 +82,65 @@ const UsersPage = () => {
     console.log("Searching for user:", query);
   };
 
+const handleToggleActive = async (user) => {
+    const newStatus = user.is_active === 1 ? 0 : 1;
+    const userDataForUpdate = {
+      user_id: user.id,
+      user_name: user.user_name,
+      email: user.email,
+      role_id: user.role_id,
+      is_active: newStatus
+    };
+
+    try {
+      await usersService.updateUser(userDataForUpdate);
+      setUsers(currentUsers =>
+        currentUsers.map(u => (u.id === user.id ? { ...u, is_active: newStatus } : u))
+      );
+    } catch (error) {
+      console.error("Failed to update user status:", error);
+    }
+  };
+
   const columns = [
     { key: 'id', label: 'ID' },
     { key: 'user_name', label: 'Usuario' },
     { key: 'email', label: 'Correo Electrónico' },
     { key: 'role_name', label: 'Rol' },
+    { key: 'status', label: 'Estado' },
   ];
+
+  const renderUserActions = (user) => (
+    <div className="actions-cell">
+      <button onClick={() => handleEdit(user)} className="btn-edit" title="Editar">
+        <i className="fas fa-pencil-alt"></i>
+      </button>
+      <button onClick={() => handleDelete(user)} className="btn-delete" title="Eliminar">
+        <i className="fas fa-trash"></i>
+      </button>
+      <Switch
+        id={`user-active-${user.id}`} // ✨ THIS UNIQUE ID FIXES THE BUG ✨
+        checked={user.is_active === 1}
+        onChange={() => handleToggleActive(user)}
+        title={user.is_active === 1 ? 'Desactivar usuario' : 'Activar usuario'}
+      />
+    </div>
+  );
 
   return (
     <div className="page-container">
       <PageHeader title="Gestión de Usuarios" onAdd={handleAdd} />
-      <SearchBar onSearch={handleSearch} placeholder="Buscar por usuario o correo..." />
+      <SearchBar placeholder="Buscar por usuario o correo..." onSearch={() => {}} />
       <DataTable
         columns={columns}
         data={users}
         loading={loading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        renderActions={renderUserActions}
+        renderCell={(item, column) => {
+          if (column.key === 'status') {
+            return item.is_active === 1 ? <span className="status-active">Activo</span> : <span className="status-inactive">Inactivo</span>;
+          }
+        }}
       />
       {isModalOpen && (
         <Modal

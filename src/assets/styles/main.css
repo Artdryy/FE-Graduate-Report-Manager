@@ -1,11 +1,10 @@
-/* ===== LOGIN PAGE STYLES ===== */
-/* Import the fonts from your old project */
+/* ===== GLOBAL & LOGIN PAGE STYLES ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
 @import './layout.css';
 @import './page.css';
 @import './data-table.css';
-@import './modal.css';    
-@import './buttons.css'; 
+@import './modal.css';
+@import './buttons.css';
 @import './switch.css';
 @import './multiselect.css';
 
@@ -16,15 +15,11 @@
   --gray-2: #6E7F8D;
   --text-dark: #2A3646;
   --primary-color: #4a90e2;
-
-  /* ADD THIS VARIABLE */
   --topbar-height: 4rem;
-  
   --shadow-raise: -4px -4px 8px rgba(255, 255, 255, 0.8),
                   6px 6px 12px rgba(16, 27, 29, 0.15);
   --shadow-press: inset -3px -3px 6px rgba(255, 255, 255, 0.7),
                   inset 3px 3px 6px rgba(16, 27, 29, 0.1);
-
   --font-title: 'Poppins', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
@@ -39,7 +34,16 @@ body, html {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-light);
   height: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+.file-name-display {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--gray-2);
+  text-align: left;
+  word-break: break-all;
 }
 
 a {
@@ -47,6 +51,194 @@ a {
   color: inherit;
 }
 
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-start;
+}
+
+.actions-cell .switch-container {
+  transform: translateY(1px);
+}
+
+.permissions-modal-wrapper .modal-content {
+  max-width: 850px;
+}
+
+/* Hide the 'Cancelar' button ONLY in the permissions modal */
+.permissions-modal-wrapper .btn-secondary {
+  display: none;
+}
+
+/* Center the 'Guardar' button ONLY in the permissions modal */
+.permissions-modal-wrapper .modal-buttons {
+  justify-content: center;
+}
+
+.permissions-modal-wrapper .permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 5rem 2rem;
+}
+
+.permissions-modal-wrapper .permission-module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.permissions-modal-wrapper .permission-module h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.permissions-modal-wrapper .permission-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.permissions-modal-wrapper .permission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.permissions-modal-wrapper .permission-item span {
+  text-transform: capitalize;
+  color: #333;
+}
+
+.keywords-modal-wrapper .modal-content {
+  max-width: 700px;
+}
+
+.keyword-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-keyword-section {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-keyword-section .modal-input {
+  flex-grow: 1;
+}
+
+.add-keyword-section .btn-primary {
+  flex-shrink: 0;
+}
+
+.keyword-pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--gray-1);
+  border-radius: 8px;
+  min-height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.keyword-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2rem;
+  padding: 0.2rem 0.6rem; /* Reduced vertical padding */
+  border-radius: 16px;
+  background-color: rgba(52, 152, 219, 0.15);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  color: #2980b9;
+  font-weight: 500;
+  font-size: 0.85rem; /* Smaller font */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+  .keyword-pill.selected {
+    background-color: #3498db; 
+    border-color: #2980b9;
+    color: white;
+  }
+
+  .delete-keyword-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.6;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .keyword-pill:hover .delete-keyword-btn {
+    opacity: 1;
+  }
+
+  .keywords-display-box {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    background-color: var(--bg-light);
+    color: var(--gray-2);
+    min-height: 40px;
+  }
+
+  .report-secondary-row-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); 
+      width: 72%;
+      padding: 0rem; 
+    }
+
+  .report-secondary-row-content span:nth-child(1) {
+    text-align: left;
+  }
+  .report-secondary-row-content span:nth-child(2) {
+    text-align: center;
+  }
+  .report-secondary-row-content span:nth-child(3) {
+    text-align: right;
+  }
+
+  .pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  }
+
+  .pagination-controls span {
+    font-size: 0.9rem;
+    color: var(--gray-2);
+  }
+
+  .pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+/* ===== LOGIN PAGE STYLES ===== */
 .login-container {
   display: flex;
   height: 100vh;
@@ -183,10 +375,9 @@ a {
   text-decoration: underline;
 }
 
-/* Responsive styles for smaller screens */
 @media (max-width: 768px) {
   .login-promo {
-    display: none; /* Hide the promo section on small screens */
+    display: none;
   }
 
   .login-form-container {
@@ -196,5 +387,33 @@ a {
   .login-card {
     margin: 1rem;
     padding: 1.5rem;
+  }
+
+  .report-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #333;
+  }
+
+  .report-work-area {
+      color: #555;
+      font-style: italic;
+      margin: 4px 0;
+  }
+
+  .report-keywords {
+      font-size: 0.9em;
+      color: #0056b3;
+  }
+
+  .report-detail {
+      margin-right: 20px;
+      font-size: 0.9em;
+      color: #444;
+  }
+
+  .actions-cell {
+      vertical-align: middle !important;
+      text-align: center;
   }
 }

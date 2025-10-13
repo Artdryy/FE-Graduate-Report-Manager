@@ -57,8 +57,13 @@ const handleAdd = () => {
   const handleSubmit = async () => {
     try {
       if (currentCompany.id) {
-        const { id, ...updateData } = currentCompany;
-        await companiesService.updateCompany(id, updateData);
+        const companyData = {
+            ...currentCompany,
+            company_id: currentCompany.id 
+        };
+        delete companyData.id; 
+
+        await companiesService.updateCompany(companyData);
       } else {
         await companiesService.createCompany(currentCompany);
       }
@@ -71,17 +76,19 @@ const handleAdd = () => {
 
   const handleSearch = (query) => console.log("Searching for company:", query);
   
-  const columns = [
+    const columns = [
     { key: 'id', label: 'ID' },
-    { key: 'company_name', label: 'Nombre de la Empresa' },
-    { key: 'city', label: 'Ciudad' },
-    { key: 'state', label: 'Estado' },
+    { key: 'company_name', label: 'Nombre' },
+    { key: 'description', label: 'Descripción' },
+    { key: 'address', label: 'Dirección' },
+    { key: 'phone_number', label: 'Teléfono' },
+    { key: 'email', label: 'Email' },
   ];
 
   return (
     <div className="page-container">
       <PageHeader title="Gestión de Empresas" onAdd={handleAdd} />
-      <SearchBar onSearch={handleSearch} placeholder="Buscar por empresa o ciudad..." />
+      <SearchBar placeholder="Buscar por nombre de empresa..." onSearch={() => {}} />
       <DataTable
         columns={columns}
         data={companies}
@@ -94,7 +101,7 @@ const handleAdd = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}
-          title={currentCompany && currentCompany.id ? "Editar Empresa" : "Agregar Empresa"}
+          title={currentCompany.id ? "Editar Empresa" : "Agregar Empresa"}
         >
           <CompanyForm company={currentCompany} setCompany={setCurrentCompany} />
         </Modal>

@@ -4,35 +4,35 @@ import Switch from '../common/Switch'; // Import the Switch component
 
 const UserForm = ({ user, setUser }) => {
   const [roles, setRoles] = useState([]);
+  const [loadingRoles, setLoadingRoles] = useState(true);
   const isNewUser = !user.id;
+
 
   useEffect(() => {
     const fetchRoles = async () => {
+      setLoadingRoles(true); 
       try {
         const data = await rolesService.getRoles();
         setRoles(data || []);
       } catch (err) {
         console.error("Failed to load roles:", err);
         setRoles([]);
+      } finally {
+        setLoadingRoles(false); 
       }
     };
     fetchRoles();
   }, []);
 
-  // THE FIX IS HERE: This function now handles both regular inputs and the Switch
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    // If it's a checkbox (our switch), use the 'checked' property to get a boolean, then convert to 1 or 0.
-    // Otherwise, for all other inputs, use the 'value'.
-    const val = type === 'checkbox' ? (checked ? 1 : 0) : value;
-
+    const { name, value } = e.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: val,
+      [name]: value,
     }));
   };
 
-  return (
+   return (
     <>
       <div className="input-group">
         <label htmlFor="user_name">Nombre de Usuario</label>
@@ -66,27 +66,24 @@ const UserForm = ({ user, setUser }) => {
         <label htmlFor="role_id">Rol</label>
         <select
           id="role_id" name="role_id" className="modal-input"
-          value={user.role_id || ''} onChange={handleChange} required >
-          <option value="">Seleccione un rol</option>
-          {roles.map((role) => (
-            <option key={role.id} value={role.id}>
-              {role.role_name}
-            </option>
-          ))}
+          value={user.role_id || ''} onChange={handleChange} required
+          disabled={loadingRoles} 
+        >
+          {}
+          {loadingRoles ? (
+            <option>Cargando roles...</option>
+          ) : (
+            <>
+              <option value="">Seleccione un rol</option>
+              {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.role_name}
+                </option>
+              ))}
+            </>
+          )}
         </select>
       </div>
-
-      {/* Show the is_active switch only when editing an existing user */}
-      {!isNewUser && (
-        <div className="input-group">
-           <Switch
-              label="Activo"
-              checked={user.is_active === 1}
-              // We pass a synthetic event object to handleChange to make it work
-              onChange={(e) => handleChange({ target: { name: 'is_active', type: 'checkbox', checked: e.target.checked }})}
-          />
-        </div>
-      )}
     </>
   );
 };

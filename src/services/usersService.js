@@ -2,7 +2,6 @@ import apiClient from '../api/axiosConfig';
 
 const getUsers = async () => {
   try {
-    // The interceptor now handles the token automatically. No headers needed here.
     const response = await apiClient.get('/users/list');
     const data = response.data.data;
     return data && typeof data === 'object' ? Object.values(data) : [];
@@ -22,16 +21,15 @@ const createUser = async (userData) => {
   }
 };
 
-const updateUser = async (id, userData) => {
+const updateUser = async (userData) => {
   try {
-    const response = await apiClient.put(`/users/update/${id}`, userData);
+    const response = await apiClient.put('/users/update', userData);
     return response.data;
   } catch (error) {
     console.error('Error updating user:', error);
     throw error;
   }
 };
-
 const deleteUser = async (id) => {
   try {
     const response = await apiClient.delete(`/users/delete/${id}`);

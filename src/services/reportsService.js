@@ -31,9 +31,10 @@ const createReport = async (formData) => {
   }
 };
 
-const updateReport = async (id, reportData) => {
+const updateReport = async (id, formData) => {
   try {
-    const response = await apiClient.put(`/reports/update/${id}`, reportData);
+    // We use apiClientPdf to send FormData
+    const response = await apiClientPdf.put(`/reports/update/${id}`, formData);
     return response.data;
   } catch (error) {
     console.error('Error updating report:', error);
@@ -50,6 +51,7 @@ const deleteReport = async (id) => {
     throw error;
   }
 };
+
 
 export const reportsService = {
   getReports,

@@ -1,5 +1,3 @@
-// src/pages/LoginPage.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/authService';
@@ -11,12 +9,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // THE FIX IS HERE: Check for 'accessToken'
     const token = localStorage.getItem('accessToken'); 
     if (token) {
       navigate('/reports'); 
     }
-  }, [navigate]); // Add navigate to the dependency array
+  }, [navigate]); 
 
   const handleLogin = async (event) => {
     event.preventDefault();

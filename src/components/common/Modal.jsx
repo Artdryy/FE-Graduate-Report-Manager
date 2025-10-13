@@ -1,28 +1,23 @@
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, title, children, onSubmit }) => {
-  if (!isOpen) {
-    return null;
-  }
+const Modal = ({ isOpen, onClose, onSubmit, title, children, className }) => {
+  if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit();
-    }
+    onSubmit();
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={`modal-overlay ${className || ''}`} onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{title}</h2>
-        <form onSubmit={handleSubmit}>
-          {children}
+        <form onSubmit={handleFormSubmit}>
+          <div className="modal-body">
+            {children}
+          </div>
           <div className="modal-buttons">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn-primary">
               Guardar
             </button>
           </div>

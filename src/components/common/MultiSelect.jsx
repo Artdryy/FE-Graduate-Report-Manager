@@ -26,7 +26,7 @@ const MultiSelect = ({ options, selected, onChange, placeholder = "Seleccione...
   };
 
   const handleRemove = (e, option) => {
-    e.stopPropagation(); // Prevent the dropdown from opening when removing a pill
+    e.stopPropagation();
     onChange(selected.filter(s => s.id !== option.id));
   };
 
