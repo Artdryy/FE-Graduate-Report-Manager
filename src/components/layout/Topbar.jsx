@@ -11,7 +11,6 @@ const Topbar = () => {
   };
 
   const openProfile = () => {
-    // This can be expanded later to open a dropdown menu
     console.log('Profile icon clicked. Logging out.');
     handleLogout();
   };
@@ -19,7 +18,7 @@ const Topbar = () => {
   return (
     <header className="topbar">
       <div className="topbar-right">
-        <div className="profile-btn" onClick={openProfile} title="Perfil / Salir">
+        <div className="profile-btn" onClick={openProfile} title="Salir">
           <i className="fas fa-user-circle"></i>
         </div>
       </div>

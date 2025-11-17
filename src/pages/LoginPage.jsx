@@ -20,7 +20,7 @@ const LoginPage = () => {
     setError('');
     try {
       await authService.login(userName, password);
-      navigate('/reports'); 
+      window.location.href = '/reports'; 
     } catch (err) {
       const apiError = err.response?.data?.message || 'Invalid credentials or server error.';
       setError(apiError);

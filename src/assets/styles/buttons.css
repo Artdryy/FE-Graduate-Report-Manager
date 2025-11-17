@@ -16,7 +16,6 @@
   transform: translateY(-1px);
 }
 
-/* Secondary Button */
 .btn-secondary {
   background-color: #f0f0f0;
   color: var(--text-dark);
@@ -33,7 +32,6 @@
   background-color: #e6e6e6;
 }
 
-/* Action buttons in tables */
 .btn-edit, .btn-delete, .btn-permissions {
   color: white;
   border: none;
@@ -70,8 +68,7 @@
   font-size: 15px;
 }
 
-/* Specific colors for each button */
-.btn-pdf { background-color: #5bc0de; } /* A light blue for "view" */
+.btn-pdf { background-color: #5bc0de; } 
 .btn-edit { background-color: #f0ad4e; }
 .btn-delete { background-color: #d9534f; }
 .btn-permissions { background-color: #3498db; }
@@ -80,7 +77,6 @@
   opacity: 0.85;
 }
 
-/* Style for the custom file select button */
 .btn-file-select {
   width: 100%;
   padding: 0.8rem;

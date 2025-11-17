@@ -149,7 +149,7 @@ const ReportsPage = () => {
   };
 
   const handleSelectPdf = (report) => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5174';
     const pdfUrl = `${apiUrl.replace('/api', '')}/uploads/${report.pdf_route}`;
     window.open(pdfUrl, '_blank');
   };

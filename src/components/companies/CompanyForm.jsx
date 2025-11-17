@@ -1,5 +1,3 @@
-// src/components/companies/CompanyForm.jsx
-
 import React from 'react';
 
 const CompanyForm = ({ company, setCompany }) => {
@@ -23,7 +21,7 @@ const CompanyForm = ({ company, setCompany }) => {
         />
       </div>
 
-      {/* --- CAMPOS NUEVOS --- */}
+      {}
       <div className="input-group">
         <label htmlFor="description">Descripción</label>
         <textarea

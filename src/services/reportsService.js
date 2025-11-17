@@ -13,14 +13,12 @@ const getReports = async () => {
 
 const createReport = async (formData) => {
   try {
-    // Ensure we're using FormData correctly
     if (!(formData instanceof FormData)) {
       throw new Error('Data must be an instance of FormData');
     }
 
     const response = await apiClientPdf.post('/reports/create', formData, {
       headers: {
-        // Let axios set the Content-Type header with boundary
         'Content-Type': undefined
       }
     });

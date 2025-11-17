@@ -9,8 +9,6 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   const [newKeywordName, setNewKeywordName] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // ✅ THIS IS THE FIX: This useEffect now correctly resets the state
-  // every time the modal opens with a new set of initial IDs.
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
@@ -18,7 +16,6 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
         .then(data => setAllKeywords(data))
         .finally(() => setLoading(false));
       
-      // This line ensures the modal's selection matches the report's current keywords
       setSelectedIds(new Set(initialSelectedIds));
     }
   }, [isOpen, initialSelectedIds]);
@@ -70,7 +67,6 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   };
   
   const handleSave = () => {
-    // This correctly sends a brand new array back to the parent
     onSave(Array.from(selectedIds));
     onClose();
   };

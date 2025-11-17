@@ -17,7 +17,7 @@ const getKeywords = async () => {
 const createKeyword = async (keyword) => {
   try {
     const response = await apiClient.post('/keywords/create', { keyword });
-    return response.data.data; // Return the new keyword object with its ID
+    return response.data.data;
   } catch (error) {
     console.error('Error creating keyword:', error);
     throw error;

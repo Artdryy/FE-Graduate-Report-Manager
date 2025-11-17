@@ -59,7 +59,6 @@
   color: var(--text-dark);
 }
 
-/* Switch specific styles for permissions */
 .permission-item .switch-container {
   margin: 0;
 }

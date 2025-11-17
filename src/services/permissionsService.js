@@ -1,4 +1,3 @@
-// src/services/permissionsService.js
 import apiClient from '../api/axiosConfig';
 
 const getPermissionsForRole = async (roleId) => {
@@ -6,13 +5,10 @@ const getPermissionsForRole = async (roleId) => {
     const response = await apiClient.get(`/permissions/role/${roleId}`);
     const data = response.data.data;
 
-    // ✨ CORRECTION: Ensure the returned data is always an array
     if (data && typeof data === 'object' && !Array.isArray(data)) {
-      return Object.values(data); // Convert the object to an array
+      return Object.values(data); 
     }
-    
-    // If it's already an array or something else, return it or a safe fallback
-    return data || [];
+      return data || [];
 
   } catch (error) {
     console.error(`Error fetching permissions for role ${roleId}:`, error);
