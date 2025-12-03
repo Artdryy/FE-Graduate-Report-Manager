@@ -1,34 +1,20 @@
-// src/routes/ProtectedRoute.jsx
-
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
+import { useAuth } from '../context/AuthContext'; 
 
 const ProtectedRoute = () => {
-  const token = localStorage.getItem('accessToken');
+  const { isAuthenticated, loading } = useAuth(); 
 
-  if (!token) {
+
+  if (loading) {
+    return <div>Cargando...</div>; 
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  try {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-
-    if (decodedToken.exp < currentTime) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      return <Navigate to="/login" />;
-    }
-  } catch (error) {
-    console.error("Invalid token:", error);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    return <Navigate to="/login" />;
-  }
-
-  // If token is valid, render the MainLayout which contains the Outlet for nested routes.
   return <MainLayout />;
 };
 

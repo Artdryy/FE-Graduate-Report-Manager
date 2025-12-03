@@ -1,17 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../../services/authService';
+import { useAuth } from '../../context/AuthContext'; 
 
 const Topbar = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth(); 
 
   const handleLogout = () => {
-    authService.logout();
+    logout(); 
     navigate('/login');
   };
 
   const openProfile = () => {
-    // This can be expanded later to open a dropdown menu
     console.log('Profile icon clicked. Logging out.');
     handleLogout();
   };

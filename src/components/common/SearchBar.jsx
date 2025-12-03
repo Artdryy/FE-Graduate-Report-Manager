@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 
 const SearchBar = ({ onSearch, placeholder = 'Buscar...' }) => {
-  const [query, setQuery] = useState('');
 
   const handleInputChange = (e) => {
-    setQuery(e.target.value);
+    const val = e.target.value;
+    onSearch(val);
   };
 
-  const handleSearch = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query);
   };
 
   return (
     <div className="search-container">
-      <form onSubmit={handleSearch}>
+      <form onSubmit={handleSubmit}>
         <div className="search-bar">
           <i className="fas fa-search"></i>
           <input
             type="text"
             placeholder={placeholder}
-            value={query}
             onChange={handleInputChange}
           />
         </div>

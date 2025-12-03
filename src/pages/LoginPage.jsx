@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authService } from '../services/authService';
+import { useAuth } from '../context/AuthContext'; 
 
 const LoginPage = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  
+  const { login, isAuthenticated } = useAuth(); 
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken'); 
-    if (token) {
+    if (isAuthenticated) { 
       navigate('/reports'); 
     }
-  }, [navigate]); 
+  }, [isAuthenticated, navigate]); 
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
     try {
-      await authService.login(userName, password);
+      await login(userName, password); 
       navigate('/reports'); 
     } catch (err) {
       const apiError = err.response?.data?.message || 'Invalid credentials or server error.';

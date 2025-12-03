@@ -2,11 +2,20 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/styles/logo.png';
 import logoExpanded from '../../assets/styles/logo-expanded.png';
+import { useAuth } from '../../context/AuthContext';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { permissions } = useAuth(); 
 
   const logoActual = isExpanded ? logoExpanded : logo;
+
+  const moduleLinks = [
+    { name: 'Reports', path: '/reports', icon: 'fa-file-alt', label: 'Informes' },
+    { name: 'Users', path: '/users', icon: 'fa-user-graduate', label: 'Usuarios' },
+    { name: 'Companies', path: '/companies', icon: 'fa-building', label: 'Empresas' },
+    { name: 'Roles', path: '/roles', icon: 'fa-user-shield', label: 'Roles' },
+  ];
 
   return (
     <aside
@@ -19,34 +28,19 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-menu">
-        <NavLink 
-          to="/reports" 
-          className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
-        >
-          <i className="fas fa-file-alt"></i>
-          <span>Informes</span>
-        </NavLink>
-        <NavLink 
-          to="/users" 
-          className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
-        >
-          <i className="fas fa-user-graduate"></i>
-          <span>Usuarios</span>
-        </NavLink>
-        <NavLink 
-          to="/companies" 
-          className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
-        >
-          <i className="fas fa-building"></i>
-          <span>Empresas</span>
-        </NavLink>
-        <NavLink 
-          to="/roles" 
-          className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
-        >
-          <i className="fas fa-user-shield"></i>
-          <span>Roles</span>
-        </NavLink>
+        {}
+        {moduleLinks.map((link) => (
+          permissions[link.name]?.is_visible === 1 && (
+            <NavLink 
+              key={link.path}
+              to={link.path} 
+              className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
+            >
+              <i className={`fas ${link.icon}`}></i>
+              <span>{link.label}</span>
+            </NavLink>
+          )
+        ))}
       </div>
     </aside>
   );

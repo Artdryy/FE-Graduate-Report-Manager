@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { usersService } from '../services/usersService';
 import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
@@ -6,17 +6,20 @@ import SearchBar from '../components/common/SearchBar';
 import Modal from '../components/common/Modal';
 import UserForm from '../components/users/UserForm';
 import Switch from '../components/common/Switch';
+import { useAuth } from '../context/AuthContext';
 
   const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const { permissions } = useAuth();
+
+  const can = useMemo(() => permissions['Users']?.permissions || {}, [permissions]);
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // We only need one API call now!
       const data = await usersService.getUsers();
       setUsers(data);
     } catch (err) {
@@ -110,26 +113,55 @@ const handleToggleActive = async (user) => {
     { key: 'status', label: 'Estado' },
   ];
 
-  const renderUserActions = (user) => (
+const renderUserActions = (user) => (
     <div className="actions-cell">
-      <button onClick={() => handleEdit(user)} className="btn-edit" title="Editar">
+      {/* EDIT BUTTON */}
+      <button 
+        onClick={() => can.UPDATE && handleEdit(user)} 
+        className="btn-edit" 
+        disabled={!can.UPDATE} 
+        title={can.UPDATE ? "Editar" : "Permisos insuficientes"}
+        style={!can.UPDATE ? { 
+          opacity: 0.5, 
+          cursor: 'not-allowed', 
+          backgroundColor: '#ccc',
+          border: '1px solid #999' 
+        } : {}}
+      >
         <i className="fas fa-pencil-alt"></i>
       </button>
-      <button onClick={() => handleDelete(user)} className="btn-delete" title="Eliminar">
+
+      {/* DELETE BUTTON */}
+      <button 
+        onClick={() => can.DELETE && handleDelete(user)} 
+        className="btn-delete" 
+        disabled={!can.DELETE}
+        title={can.DELETE ? "Eliminar" : "Permisos insuficientes"}
+        style={!can.DELETE ? { 
+          opacity: 0.5, 
+          cursor: 'not-allowed', 
+          backgroundColor: '#ccc',
+          border: '1px solid #999'
+        } : {}}
+      >
         <i className="fas fa-trash"></i>
       </button>
+
+      {/* SWITCH */}
       <Switch
-        id={`user-active-${user.id}`} // ✨ THIS UNIQUE ID FIXES THE BUG ✨
+        id={`user-active-${user.id}`}
         checked={user.is_active === 1}
         onChange={() => handleToggleActive(user)}
-        title={user.is_active === 1 ? 'Desactivar usuario' : 'Activar usuario'}
+        // Update switch tooltip as well
+        title={can.UPDATE ? (user.is_active === 1 ? 'Desactivar usuario' : 'Activar usuario') : "Permisos insuficientes"}
+        disabled={!can.UPDATE}
       />
     </div>
   );
 
   return (
     <div className="page-container">
-      <PageHeader title="Gestión de Usuarios" onAdd={handleAdd} />
+      <PageHeader title="Gestión de Usuarios" onAdd={handleAdd} showAddButton={can.CREATE === 1} />
       <SearchBar placeholder="Buscar por usuario o correo..." onSearch={() => {}} />
       <DataTable
         columns={columns}

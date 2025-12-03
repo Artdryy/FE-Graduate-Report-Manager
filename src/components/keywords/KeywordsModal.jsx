@@ -9,16 +9,16 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   const [newKeywordName, setNewKeywordName] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // ✅ THIS IS THE FIX: This useEffect now correctly resets the state
-  // every time the modal opens with a new set of initial IDs.
+  // Nuevo estado para controlar qué palabra clave se va a eliminar
+  const [keywordToDelete, setKeywordToDelete] = useState(null);
+
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
       keywordsService.getKeywords()
         .then(data => setAllKeywords(data))
         .finally(() => setLoading(false));
-      
-      // This line ensures the modal's selection matches the report's current keywords
+
       setSelectedIds(new Set(initialSelectedIds));
     }
   }, [isOpen, initialSelectedIds]);
@@ -52,76 +52,109 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
     }
   };
 
-  const handleDeleteKeyword = async (e, keywordId) => {
-    e.stopPropagation();
-    if (window.confirm('¿Seguro que quieres eliminar esta palabra clave de forma permanente? Afectará a todos los reportes que la usen.')) {
-      try {
-        await keywordsService.deleteKeyword(keywordId);
-        setAllKeywords(prev => prev.filter(k => k.id !== keywordId));
-        setSelectedIds(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(keywordId);
-          return newSet;
-        });
-      } catch (error) {
-        alert('No se pudo eliminar la palabra clave.');
-      }
+  // Paso 1: Al hacer click en borrar, solo guardamos el ID y abrimos el modal
+  const handleDeleteClick = (e, keywordId) => {
+    e.stopPropagation(); // Evitar seleccionar la píldora al borrar
+    setKeywordToDelete(keywordId);
+  };
+
+  // Paso 2: Confirmar la eliminación (Ejecutado por el Modal de confirmación)
+  const confirmDelete = async () => {
+    if (!keywordToDelete) return;
+
+    try {
+      await keywordsService.deleteKeyword(keywordToDelete);
+      setAllKeywords(prev => prev.filter(k => k.id !== keywordToDelete));
+      setSelectedIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(keywordToDelete);
+        return newSet;
+      });
+      setKeywordToDelete(null); // Cerrar el modal de confirmación
+    } catch (error) {
+      alert('No se pudo eliminar la palabra clave.');
+      setKeywordToDelete(null);
     }
   };
-  
+
   const handleSave = () => {
-    // This correctly sends a brand new array back to the parent
     onSave(Array.from(selectedIds));
     onClose();
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={handleSave}
-      title="Administrar Palabras Clave"
-      className="keywords-modal-wrapper"
-    >
-      <div className="keyword-controls">
-        <input
-          type="text"
-          placeholder="Buscar palabras clave..."
-          className="modal-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <div className="add-keyword-section">
+    <>
+      {/* Modal Principal de Palabras Clave */}
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSubmit={handleSave}
+        title="Administrar Palabras Clave"
+        className="keywords-modal-wrapper"
+      // Usamos los defaults: Botón Guardar, Azul
+      >
+        <div className="keyword-controls">
           <input
             type="text"
-            placeholder="Nueva palabra clave"
+            placeholder="Buscar palabras clave..."
             className="modal-input"
-            value={newKeywordName}
-            onChange={(e) => setNewKeywordName(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="button" className="btn-primary" onClick={handleAddNewKeyword}>Agregar</button>
-        </div>
-      </div>
-      <div className="keyword-pill-container">
-        {loading ? <p>Cargando...</p> : filteredKeywords.map(keyword => (
-          <div
-            key={keyword.id}
-            className={`keyword-pill ${selectedIds.has(keyword.id) ? 'selected' : ''}`}
-            onClick={() => handleToggleKeyword(keyword.id)}
-          >
-            {keyword.keyword}
-            <button
-              type="button"
-              className="delete-keyword-btn"
-              onClick={(e) => handleDeleteKeyword(e, keyword.id)}
-              title="Eliminar permanentemente"
-            >
-              &times;
-            </button>
+          <div className="add-keyword-section">
+            <input
+              type="text"
+              placeholder="Nueva palabra clave"
+              className="modal-input"
+              value={newKeywordName}
+              onChange={(e) => setNewKeywordName(e.target.value)}
+            />
+            <button type="button" className="btn-primary" onClick={handleAddNewKeyword}>Agregar</button>
           </div>
-        ))}
-      </div>
-    </Modal>
+        </div>
+        <div className="keyword-pill-container">
+          {loading ? <p>Cargando...</p> : filteredKeywords.map(keyword => (
+            <div
+              key={keyword.id}
+              className={`keyword-pill ${selectedIds.has(keyword.id) ? 'selected' : ''}`}
+              onClick={() => handleToggleKeyword(keyword.id)}
+            >
+              {keyword.keyword}
+              <button
+                type="button"
+                className="delete-keyword-btn"
+                onClick={(e) => handleDeleteClick(e, keyword.id)} // Usamos la nueva función
+                title="Eliminar permanentemente"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+      </Modal>
+
+      {/* Nuevo Modal de Confirmación (anidado visualmente) */}
+      {keywordToDelete && (
+        <Modal
+          isOpen={!!keywordToDelete}
+          onClose={() => setKeywordToDelete(null)}
+          onSubmit={confirmDelete}
+          title="Eliminar Palabra Clave"
+          submitLabel="Eliminar"
+          submitClass="btn-danger" // Usamos el estilo rojo definido en buttons.css
+          className="confirmation-modal" // Opcional si quieres estilos específicos
+        >
+          <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+            <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+              ¿Seguro que quieres eliminar esta palabra clave de forma permanente?
+            </p>
+            <p style={{ color: '#d9534f', fontWeight: '500' }}>
+              ⚠ Afectará a todos los reportes que la usen.
+            </p>
+          </div>
+        </Modal>
+      )}
+    </>
   );
 };
 

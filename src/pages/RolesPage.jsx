@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { rolesService } from '../services/rolesService';
 import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
@@ -6,17 +6,19 @@ import SearchBar from '../components/common/SearchBar';
 import Modal from '../components/common/Modal';
 import RoleForm from '../components/roles/RoleForm';
 import PermissionsModal from '../components/roles/PermissionsModal';
+import { useAuth } from '../context/AuthContext';
 
 const RolesPage = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState(null);
+  const { permissions } = useAuth();
 
+  const can = useMemo(() => permissions['Roles']?.permissions || {}, [permissions]);
   const [isPermissionsModalOpen, setIsPermissionsModalOpen] = useState(false);
   const [selectedRoleForPermissions, setSelectedRoleForPermissions] = useState(null);
 
-  // Function to fetch and update roles
   const fetchRoles = async () => {
     setLoading(true);
     try {
@@ -24,7 +26,6 @@ const RolesPage = () => {
       setRoles(data);
     } catch (err) {
       console.error("Failed to load roles", err);
-      // You can add an error state here to show a message to the user
     } finally {
       setLoading(false);
     }
@@ -35,7 +36,7 @@ const RolesPage = () => {
   }, []);
 
   const handleAdd = () => {
-    setCurrentRole({ role_name: '', description: '' }); // Initialize for a new role
+    setCurrentRole({ role_name: '', description: '' }); 
     setIsModalOpen(true);
   };
 
@@ -48,10 +49,9 @@ const RolesPage = () => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar el rol "${role.role_name}"?`)) {
       try {
         await rolesService.deleteRole(role.id);
-        fetchRoles(); // Refresh the data
+        fetchRoles(); 
       } catch (error) {
         console.error("Failed to delete role:", error);
-        // Add a user-friendly error notification here
       }
     }
   };
@@ -89,18 +89,56 @@ const RolesPage = () => {
     setIsPermissionsModalOpen(false);
   };
 
-  const renderRoleActions = (role) => (
-    <>
-      <button onClick={() => handleOpenPermissionsModal(role)} className="btn-permissions" title="Permisos">
-      <i className="fas fa-key"></i>
+const renderRoleActions = (role) => (
+    <div className="actions-cell">
+      {/* PERMISSIONS BUTTON (Requires UPDATE permission) */}
+      <button 
+        onClick={() => can.UPDATE && handleOpenPermissionsModal(role)} 
+        className="btn-permissions" 
+        disabled={!can.UPDATE}
+        title={can.UPDATE ? "Permisos" : "Permisos insuficientes"}
+        style={!can.UPDATE ? { 
+          opacity: 0.5, 
+          cursor: 'not-allowed', 
+          backgroundColor: '#ccc', 
+          border: '1px solid #999' 
+        } : {}}
+      >
+        <i className="fas fa-key"></i>
       </button>
-      <button onClick={() => handleEdit(role)} className="btn-edit" title="Editar">
+
+      {/* EDIT BUTTON */}
+      <button 
+        onClick={() => can.UPDATE && handleEdit(role)} 
+        className="btn-edit" 
+        disabled={!can.UPDATE}
+        title={can.UPDATE ? "Editar" : "Permisos insuficientes"}
+        style={!can.UPDATE ? { 
+          opacity: 0.5, 
+          cursor: 'not-allowed', 
+          backgroundColor: '#ccc', 
+          border: '1px solid #999' 
+        } : {}}
+      >
         <i className="fas fa-pencil-alt"></i>
       </button>
-      <button onClick={() => handleDelete(role)} className="btn-delete" title="Eliminar">
+
+      {/* DELETE BUTTON */}
+      <button 
+        onClick={() => can.DELETE && handleDelete(role)} 
+        className="btn-delete" 
+        disabled={!can.DELETE}
+        title={can.DELETE ? "Eliminar" : "Permisos insuficientes"}
+        style={!can.DELETE ? { 
+          opacity: 0.5, 
+          cursor: 'not-allowed', 
+          backgroundColor: '#ccc', 
+          border: '1px solid #999' 
+        } : {}}
+      >
         <i className="fas fa-trash"></i>
       </button>
-    </>
+    </div>
   );
 
   const columns = [
@@ -111,7 +149,7 @@ const RolesPage = () => {
 
   return (
     <div className="page-container">
-      <PageHeader title="Gestión de Roles" onAdd={handleAdd} />
+      <PageHeader title="Gestión de Roles" onAdd={handleAdd} showAddButton={can.CREATE === 1}/>
       <SearchBar onSearch={() => {}} placeholder="Buscar por nombre de rol..." />
       <DataTable
         columns={columns}

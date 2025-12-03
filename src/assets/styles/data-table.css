@@ -3,7 +3,7 @@
   overflow-x: auto;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 table {
@@ -29,18 +29,19 @@ table th {
 }
 
 table tbody tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #e5e8eb;
 }
 
 .actions-cell {
   white-space: nowrap;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit,
+.btn-delete {
   padding: 0.5rem;
   border: none;
   border-radius: 6px;
@@ -54,17 +55,21 @@ table tbody tr:hover {
 }
 
 .btn-edit {
-  background-color: #f59e0b; /* Amber 500 */
+  background-color: #f59e0b;
+  /* Amber 500 */
 }
 
 .btn-edit:hover {
-  background-color: #d97706; /* Amber 600 */
+  background-color: #d97706;
+  /* Amber 600 */
 }
 
 .btn-delete {
-  background-color: #ef4444; /* Red 500 */
+  background-color: #ef4444;
+  /* Red 500 */
 }
 
 .btn-delete:hover {
-  background-color: #dc2626; /* Red 600 */
+  background-color: #dc2626;
+  /* Red 600 */
 }

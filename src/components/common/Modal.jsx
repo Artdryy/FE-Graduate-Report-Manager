@@ -1,6 +1,15 @@
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, onSubmit, title, children, className }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  children,
+  className,
+  submitLabel = "Guardar",
+  submitClass = "btn-primary"
+}) => {
   if (!isOpen) return null;
 
   const handleFormSubmit = (e) => {
@@ -17,8 +26,11 @@ const Modal = ({ isOpen, onClose, onSubmit, title, children, className }) => {
             {children}
           </div>
           <div className="modal-buttons">
-            <button type="submit" className="btn-primary">
-              Guardar
+            <button type="button" className="btn-secondary" onClick={onClose}>
+              Cancelar
+            </button>
+            <button type="submit" className={submitClass}>
+              {submitLabel}
             </button>
           </div>
         </form>
