@@ -9,7 +9,6 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   const [newKeywordName, setNewKeywordName] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Nuevo estado para controlar qué palabra clave se va a eliminar
   const [keywordToDelete, setKeywordToDelete] = useState(null);
 
   useEffect(() => {
@@ -52,13 +51,11 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
     }
   };
 
-  // Paso 1: Al hacer click en borrar, solo guardamos el ID y abrimos el modal
   const handleDeleteClick = (e, keywordId) => {
-    e.stopPropagation(); // Evitar seleccionar la píldora al borrar
+    e.stopPropagation(); 
     setKeywordToDelete(keywordId);
   };
 
-  // Paso 2: Confirmar la eliminación (Ejecutado por el Modal de confirmación)
   const confirmDelete = async () => {
     if (!keywordToDelete) return;
 
@@ -70,7 +67,7 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
         newSet.delete(keywordToDelete);
         return newSet;
       });
-      setKeywordToDelete(null); // Cerrar el modal de confirmación
+      setKeywordToDelete(null); 
     } catch (error) {
       alert('No se pudo eliminar la palabra clave.');
       setKeywordToDelete(null);
@@ -84,14 +81,12 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
 
   return (
     <>
-      {/* Modal Principal de Palabras Clave */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
         onSubmit={handleSave}
         title="Administrar Palabras Clave"
         className="keywords-modal-wrapper"
-      // Usamos los defaults: Botón Guardar, Azul
       >
         <div className="keyword-controls">
           <input
@@ -123,7 +118,7 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
               <button
                 type="button"
                 className="delete-keyword-btn"
-                onClick={(e) => handleDeleteClick(e, keyword.id)} // Usamos la nueva función
+                onClick={(e) => handleDeleteClick(e, keyword.id)} 
                 title="Eliminar permanentemente"
               >
                 &times;
@@ -133,7 +128,6 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
         </div>
       </Modal>
 
-      {/* Nuevo Modal de Confirmación (anidado visualmente) */}
       {keywordToDelete && (
         <Modal
           isOpen={!!keywordToDelete}
@@ -141,8 +135,8 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
           onSubmit={confirmDelete}
           title="Eliminar Palabra Clave"
           submitLabel="Eliminar"
-          submitClass="btn-danger" // Usamos el estilo rojo definido en buttons.css
-          className="confirmation-modal" // Opcional si quieres estilos específicos
+          submitClass="btn-danger" 
+          className="confirmation-modal" 
         >
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
             <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>

@@ -9,7 +9,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
   const [selectedFileName, setSelectedFileName] = useState('');
 
   useEffect(() => {
-    // Fetches companies and semesters for the dropdowns
     const fetchData = async () => {
       try {
         const [companiesData, semestersData] = await Promise.all([
@@ -35,14 +34,11 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
     if (file) {
       setSelectedFileName(file.name);
     }
-    // Propagate the event to the parent component
     onFileChange(e);
   };
 
-  // Memoize the keyword names to avoid re-calculating on every render
   const keywordDisplay = React.useMemo(() => {
     if (report.keyword_names && report.keyword_names.length > 0) {
-      // Use the keyword_names array from the API response
       return report.keyword_names.join(', ');
     }
     return 'Ninguna seleccionada';
@@ -53,7 +49,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
 
   return (
     <div className="form-grid">
-      {/* --- Row 1: Student Name & Control Number --- */}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="student_name">Nombre del Estudiante</label>
@@ -65,7 +60,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
         </div>
       </div>
 
-      {/* --- Row 2: Major & Report Title --- */}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="major">Carrera</label>
@@ -77,7 +71,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
         </div>
       </div>
 
-      {/* --- Row 3: Company & Work Area --- */}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="company_id">Empresa</label>
@@ -92,7 +85,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
         </div>
       </div>
 
-      {/* --- Row 4: Semester & Keywords --- */}
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="semester_id">Semestre</label>
@@ -110,7 +102,6 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
         </div>
       </div>
 
-      {/* --- Bottom: PDF File Selection --- */}
       <div className="form-group">
         <label>Archivo PDF</label>
         <input type="file" ref={fileInputRef} onChange={handleActualFileChange} accept=".pdf" style={{ display: 'none' }} />

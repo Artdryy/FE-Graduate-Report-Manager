@@ -24,11 +24,8 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        
-        {/* Protected Routes */}
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />     
         <Route element={<ProtectedRoute />}>
           <Route
             path="/reports"
@@ -66,7 +63,6 @@ const AppRouter = () => {
           <Route index element={<Navigate to="/reports" replace />} />
 
         </Route>
-        {/* Fallback Route */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

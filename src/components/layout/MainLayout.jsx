@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar'; // Corrected from SideBar to Sidebar
+import Sidebar from './Sidebar'; 
 import Topbar from './Topbar';
 
 const MainLayout = () => {
@@ -10,7 +10,7 @@ const MainLayout = () => {
       <div className="main-content">
         <Topbar />
         <main className="content-area">
-          <Outlet /> {/* Child routes will be rendered here */}
+          <Outlet /> 
         </main>
       </div>
     </div>

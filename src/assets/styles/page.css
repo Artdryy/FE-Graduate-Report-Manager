@@ -1,5 +1,3 @@
-/* src/assets/styles/page.css */
-
 .page-container {
   padding: 2rem;
 }
@@ -21,9 +19,8 @@
   font-family: var(--font-title);
 }
 
-/* SEARCH BAR STYLES - UPDATED */
 .search-container {
-  margin-bottom: 1.5rem;
+  margin-bottom:0rem;
 }
 
 .search-bar {
@@ -35,7 +32,7 @@
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
   max-width: 400px;
-  min-height: 44px; /* match control size used for select */
+  min-height: 44px; 
 }
 
 .search-bar:focus-within {
@@ -63,20 +60,20 @@
   color: var(--gray-2);
 }
 
-/* ===== Semester filter dropdown (neomorphic) ===== */
 .search-filter-row {
   display: flex;
   gap: 1rem;
   align-items: center;
-  justify-content: space-between; /* keep searchbar left and select right */
+  justify-content: space-between;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .semester-filter-wrapper {
   display: inline-flex;
   align-items: center;
   position: relative;
-  margin-left: auto; /* make sure it stays on the right */
+  margin-left: auto; 
 }
 
 .semester-select {
@@ -94,8 +91,8 @@
   cursor: pointer;
   transition: box-shadow 0.18s ease, transform 0.08s ease;
   font-size: 0.95rem;
-  height: 44px; /* Match search bar height to align vertically */
-  box-sizing: border-box; /* Include padding within height */
+  height: 44px;
+  box-sizing: border-box; 
   display: inline-flex;
   align-items: center;
 }
@@ -106,11 +103,10 @@
 .semester-select:focus {
   outline: none;
   box-shadow: var(--shadow-press);
-  transform: translateY(0); /* Ensure focus does not keep the pressed visual */
+  transform: translateY(0);
 }
 
 .semester-select:active {
-  /* Make click feedback immediate but reset on release */
   transform: translateY(0);
 }
 
@@ -119,7 +115,6 @@
 }
 
 .semester-select option {
-  /* Options styling is limited cross-browser; keep it simple */
   color: var(--text-dark);
   background: white;
 }
@@ -139,13 +134,10 @@
   cursor: not-allowed;
 }
 
-/* Ensure the search bar expands while keeping the select on the right */
 .search-filter-row .search-bar {
-  flex: 1 1 auto;
-  max-width: 640px; /* Keep search bar from growing too much */
+  max-width: 640px; 
 }
 
-/* Responsive: stack components on small screens */
 @media (max-width: 768px) {
   .search-filter-row {
     flex-direction: column;
@@ -159,7 +151,7 @@
     width: 100%;
     margin-left: 0;
     display: flex;
-    justify-content: flex-end; /* Keep select at the right even in stacked view */
+    justify-content: flex-end;
   }
   .semester-select {
     width: 100%;

@@ -1,9 +1,7 @@
-/* App container */
 .app-container {
   display: flex;
 }
 
-/* ===== Sidebar Styles ===== */
 .sidebar {
   position: fixed;
   top: 0;
@@ -45,14 +43,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0 1rem; /* Adjusted padding */
+  padding: 0 1rem; 
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Increased gap */
-  padding: 0.8rem 0.8rem; /* Adjusted padding */
+  gap: 1.5rem; 
+  padding: 0.8rem 0.8rem;
   border-radius: 8px;
   color: var(--gray-2);
   transition: all 0.3s ease;
@@ -86,7 +84,6 @@
   min-width: 1.2rem;
 }
 
-/* ===== Topbar Styles ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -120,7 +117,6 @@
   color: var(--text-dark);
 }
 
-/* ===== Main Content Area ===== */
 .main-content {
   width: calc(100% - 5rem);
   margin-left: 5rem;
@@ -135,10 +131,8 @@
 }
 
 .sidebar.expanded ~ .main-content .topbar {
-  left: 15rem; /* Match expanded sidebar width */
+  left: 15rem; 
 }
-
-/* This is the area where the <Outlet/> renders the pages */
 .content-area {
   background-color: var(--bg-light);
 }

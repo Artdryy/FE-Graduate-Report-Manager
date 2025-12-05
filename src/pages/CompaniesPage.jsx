@@ -92,7 +92,6 @@ const CompaniesPage = () => {
 
 const renderCompanyActions = (company) => (
     <div className="actions-cell">
-      {/* EDIT BUTTON */}
       <button 
         onClick={() => can.UPDATE && handleEdit(company)} 
         className="btn-edit" 
@@ -107,8 +106,6 @@ const renderCompanyActions = (company) => (
       >
         <i className="fas fa-pencil-alt"></i>
       </button>
-
-      {/* DELETE BUTTON */}
       <button 
         onClick={() => can.DELETE && handleDelete(company)} 
         className="btn-delete" 

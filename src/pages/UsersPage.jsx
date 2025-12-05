@@ -47,7 +47,7 @@ import { useAuth } from '../context/AuthContext';
     if (window.confirm(`¿Estás seguro de que quieres eliminar al usuario "${user.user_name}"?`)) {
       try {
         await usersService.deleteUser(user.id);
-        fetchUsers(); // Refresh the data
+        fetchUsers(); 
       } catch (error) {
         console.error("Failed to delete user:", error);
       }
@@ -115,7 +115,6 @@ const handleToggleActive = async (user) => {
 
 const renderUserActions = (user) => (
     <div className="actions-cell">
-      {/* EDIT BUTTON */}
       <button 
         onClick={() => can.UPDATE && handleEdit(user)} 
         className="btn-edit" 
@@ -130,8 +129,6 @@ const renderUserActions = (user) => (
       >
         <i className="fas fa-pencil-alt"></i>
       </button>
-
-      {/* DELETE BUTTON */}
       <button 
         onClick={() => can.DELETE && handleDelete(user)} 
         className="btn-delete" 
@@ -146,13 +143,10 @@ const renderUserActions = (user) => (
       >
         <i className="fas fa-trash"></i>
       </button>
-
-      {/* SWITCH */}
       <Switch
         id={`user-active-${user.id}`}
         checked={user.is_active === 1}
         onChange={() => handleToggleActive(user)}
-        // Update switch tooltip as well
         title={can.UPDATE ? (user.is_active === 1 ? 'Desactivar usuario' : 'Activar usuario') : "Permisos insuficientes"}
         disabled={!can.UPDATE}
       />

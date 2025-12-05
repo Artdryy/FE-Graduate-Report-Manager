@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 
 const ForgotPasswordPage = () => {
-  const [step, setStep] = useState(1); // Step 1: Enter email, Step 2: Enter code and new password
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -19,7 +19,7 @@ const ForgotPasswordPage = () => {
     try {
       await authService.requestPasswordReset(email);
       setMessage('Si el correo existe en nuestro sistema, se ha enviado un código de recuperación.');
-      setStep(2); // Move to the next step
+      setStep(2); 
     } catch (err) {
       const apiError = err.response?.data?.message || 'Error sending recovery code.';
       setError(apiError);
@@ -48,10 +48,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className="login-container">
-      {/* This is the empty left side for your image */}
       <div className="login-promo"></div>
-
-      {/* Right side with the form */}
       <div className="login-form-container">
         <div className="login-card">
           <h2>Recuperar Contraseña</h2>

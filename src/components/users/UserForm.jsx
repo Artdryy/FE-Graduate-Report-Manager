@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { rolesService } from '../../services/rolesService';
-import Switch from '../common/Switch'; // Import the Switch component
+import Switch from '../common/Switch';
 
 const UserForm = ({ user, setUser }) => {
   const [roles, setRoles] = useState([]);

@@ -71,7 +71,7 @@ const RolesPage = () => {
         await rolesService.createRole(currentRole);
       }
       handleCloseModal();
-      fetchRoles(); // Refresh data
+      fetchRoles();
     } catch (error) {
       console.error("Failed to save role:", error);
     }
@@ -91,7 +91,6 @@ const RolesPage = () => {
 
 const renderRoleActions = (role) => (
     <div className="actions-cell">
-      {/* PERMISSIONS BUTTON (Requires UPDATE permission) */}
       <button 
         onClick={() => can.UPDATE && handleOpenPermissionsModal(role)} 
         className="btn-permissions" 
@@ -106,8 +105,6 @@ const renderRoleActions = (role) => (
       >
         <i className="fas fa-key"></i>
       </button>
-
-      {/* EDIT BUTTON */}
       <button 
         onClick={() => can.UPDATE && handleEdit(role)} 
         className="btn-edit" 
@@ -122,8 +119,6 @@ const renderRoleActions = (role) => (
       >
         <i className="fas fa-pencil-alt"></i>
       </button>
-
-      {/* DELETE BUTTON */}
       <button 
         onClick={() => can.DELETE && handleDelete(role)} 
         className="btn-delete" 

@@ -1,4 +1,3 @@
-/* src/assets/styles/data-table.css */
 .table-container {
   overflow-x: auto;
   background-color: #ffffff;
@@ -56,20 +55,16 @@ table tbody tr:hover {
 
 .btn-edit {
   background-color: #f59e0b;
-  /* Amber 500 */
 }
 
 .btn-edit:hover {
   background-color: #d97706;
-  /* Amber 600 */
 }
 
 .btn-delete {
   background-color: #ef4444;
-  /* Red 500 */
 }
 
 .btn-delete:hover {
   background-color: #dc2626;
-  /* Red 600 */
 }

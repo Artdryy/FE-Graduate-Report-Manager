@@ -50,35 +50,33 @@
 
 .modal-buttons {
   display: flex;
-  justify-content: center; /* This centers the single Guardar button */
+  justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--bg-card);
 }
 
-/* Make the report modal wider for the new layout */
 .report-modal-wrapper .modal-content {
-  max-width: 850px; /* Increased width */
+  max-width: 850px; 
 }
 
-/* Grid layout for the form */
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Vertical space between rows */
+  gap: 1.5rem; 
 }
 
 .form-row {
   display: flex;
-  gap: 1.5rem; /* Horizontal space between form groups */
+  gap: 1.5rem; 
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* Space between label and input */
-  flex: 1; /* Each group takes up equal space in a row */
+  gap: 0.5rem; 
+  flex: 1; 
 }
 
 .form-group label {
@@ -86,7 +84,6 @@
   color: var(--gray-2);
 }
 
-/* Ensure the keyword display box matches other inputs */
 .keywords-display-box {
   width: 100%;
   padding: 0.8rem;
@@ -94,7 +91,7 @@
   border-radius: 8px;
   background-color: var(--bg-light);
   color: var(--text-dark);
-  min-height: 45.6px; /* Match input height */
+  min-height: 45.6px; 
   font-size: 1rem;
   line-height: 1.2;
   box-sizing: border-box;
