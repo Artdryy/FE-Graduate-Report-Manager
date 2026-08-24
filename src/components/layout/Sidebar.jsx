@@ -12,6 +12,8 @@ const Sidebar = () => {
 
   const moduleLinks = [
     { name: 'Reports', path: '/reports', icon: 'fa-file-alt', label: 'Informes' },
+    // Los semestres se administran con los permisos del modulo Reports
+    { name: 'Reports', path: '/semesters', icon: 'fa-calendar-alt', label: 'Semestres' },
     { name: 'Users', path: '/users', icon: 'fa-user-graduate', label: 'Usuarios' },
     { name: 'Companies', path: '/companies', icon: 'fa-building', label: 'Empresas' },
     { name: 'Roles', path: '/roles', icon: 'fa-user-shield', label: 'Roles' },
