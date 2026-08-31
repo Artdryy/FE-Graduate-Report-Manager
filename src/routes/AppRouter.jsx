@@ -5,6 +5,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ReportsPage from '../pages/ReportsPage';
 import UsersPage from '../pages/UsersPage';
 import CompaniesPage from '../pages/CompaniesPage';
+import SemestersPage from '../pages/SemestersPage';
 import RolesPage from '../pages/RolesPage';
 import ProtectedRoute from './ProtectedRoute';
 import { useAuth } from '../context/AuthContext'; 
@@ -32,6 +33,14 @@ const AppRouter = () => {
             element={
               <ModuleGuard moduleName="Reports">
                 <ReportsPage />
+              </ModuleGuard>
+            }
+          />
+          <Route
+            path="/semesters"
+            element={
+              <ModuleGuard moduleName="Reports">
+                <SemestersPage />
               </ModuleGuard>
             }
           />

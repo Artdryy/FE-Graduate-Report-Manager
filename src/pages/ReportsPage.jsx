@@ -7,28 +7,8 @@ import Modal from '../components/common/Modal';
 import ReportForm from '../components/reports/ReportForm';
 import KeywordsModal from '../components/keywords/KeywordsModal';
 import { useAuth } from '../context/AuthContext';
+import { sortSemesters } from '../utils/semesters';
 
-const sortSemesters = (a = '', b = '') => {
-  const normalize = (s) => (typeof s === 'string' ? s.trim() : '');
-  const sa = normalize(a);
-  const sb = normalize(b);
-
-  const parseValue = (semString) => {
-    if (!semString) return 0;
-    const parts = semString.split(' ');
-    const yearToken = parts[parts.length - 1];
-    const year = parseInt(yearToken, 10);
-    const periodToken = parts.slice(0, parts.length - 1).join(' ').toUpperCase();
-    const isSecond = periodToken.includes('AGO') || periodToken.includes('DIC');
-    const periodValue = isSecond ? 2 : 1;
-    if (Number.isFinite(year)) return (year * 10) + periodValue;
-    return periodValue;
-  };
-
-  const valA = parseValue(sa);
-  const valB = parseValue(sb);
-  return valB - valA;
-};
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);
