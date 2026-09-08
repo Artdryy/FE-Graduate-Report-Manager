@@ -7,12 +7,14 @@ import Modal from '../components/common/Modal';
 import UserForm from '../components/users/UserForm';
 import Switch from '../components/common/Switch';
 import { useAuth } from '../context/AuthContext';
+import { mensajeDeError } from '../utils/apiError';
 
   const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [submitError, setSubmitError] = useState('');
   const { permissions } = useAuth();
 
   const can = useMemo(() => permissions['Users']?.permissions || {}, [permissions]);
@@ -34,11 +36,13 @@ import { useAuth } from '../context/AuthContext';
   }, []);
 
   const handleAdd = () => {
+    setSubmitError('');
     setCurrentUser({ user_name: '', email: '', password: '', role_id: '' });
     setIsModalOpen(true);
   };
 
   const handleEdit = (user) => {
+    setSubmitError('');
     setCurrentUser(user);
     setIsModalOpen(true);
   };
@@ -57,6 +61,7 @@ import { useAuth } from '../context/AuthContext';
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentUser(null);
+    setSubmitError('');
   };
 
   const handleSubmit = async () => {
@@ -78,6 +83,7 @@ import { useAuth } from '../context/AuthContext';
       fetchUsers();
     } catch (error) {
       console.error("Failed to save user:", error);
+      setSubmitError(mensajeDeError(error, 'No se pudo guardar el usuario.'));
     }
   };
 
@@ -173,6 +179,7 @@ const renderUserActions = (user) => (
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}
+          error={submitError}
           title={currentUser && currentUser.id ? "Editar Usuario" : "Agregar Usuario"}
         >
           <UserForm user={currentUser} setUser={setCurrentUser} />

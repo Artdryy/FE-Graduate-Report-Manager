@@ -6,12 +6,14 @@ import SearchBar from '../components/common/SearchBar';
 import Modal from '../components/common/Modal';
 import CompanyForm from '../components/companies/CompanyForm';
 import { useAuth } from '../context/AuthContext';
+import { mensajeDeError } from '../utils/apiError';
 
 const CompaniesPage = () => {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCompany, setCurrentCompany] = useState(null);
+  const [submitError, setSubmitError] = useState('');
 
   const { permissions } = useAuth();
   
@@ -34,11 +36,13 @@ const CompaniesPage = () => {
   }, []);
 
   const handleAdd = () => {
+    setSubmitError('');
     setCurrentCompany({ company_name: '', description: '', address: '', phone_number: '', email: '' });
     setIsModalOpen(true);
   };
 
   const handleEdit = (company) => {
+    setSubmitError('');
     setCurrentCompany(company);
     setIsModalOpen(true);
   };
@@ -57,6 +61,7 @@ const CompaniesPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentCompany(null);
+    setSubmitError('');
   };
 
   const handleSubmit = async () => {
@@ -76,6 +81,7 @@ const CompaniesPage = () => {
       fetchCompanies();
     } catch (error) {
       console.error("Failed to save company:", error);
+      setSubmitError(mensajeDeError(error, 'No se pudo guardar la empresa.'));
     }
   };
 
@@ -140,6 +146,7 @@ const renderCompanyActions = (company) => (
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}
+          error={submitError}
           title={currentCompany.id ? "Editar Empresa" : "Agregar Empresa"}
         >
           <CompanyForm company={currentCompany} setCompany={setCurrentCompany} />

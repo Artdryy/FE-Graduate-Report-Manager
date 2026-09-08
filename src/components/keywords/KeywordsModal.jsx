@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { keywordsService } from '../../services/keywordsService';
 import Modal from '../common/Modal';
+import { mensajeDeError } from '../../utils/apiError';
 
 const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => {
   const [allKeywords, setAllKeywords] = useState([]);
@@ -8,18 +9,25 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   const [searchTerm, setSearchTerm] = useState('');
   const [newKeywordName, setNewKeywordName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [addError, setAddError] = useState('');
 
   const [keywordToDelete, setKeywordToDelete] = useState(null);
 
+  // Dos efectos separados a proposito. Antes uno solo dependia de
+  // `initialSelectedIds`, un arreglo que la pagina recreaba en cada render:
+  // cualquier cambio en el formulario volvia a lanzar la carga y reponia la
+  // seleccion, borrando de paso las palabras recien agregadas.
   useEffect(() => {
-    if (isOpen) {
-      setLoading(true);
-      keywordsService.getKeywords()
-        .then(data => setAllKeywords(data))
-        .finally(() => setLoading(false));
+    if (!isOpen) return;
+    setLoading(true);
+    keywordsService.getKeywords()
+      .then(data => setAllKeywords(data || []))
+      .finally(() => setLoading(false));
+  }, [isOpen]);
 
-      setSelectedIds(new Set(initialSelectedIds));
-    }
+  useEffect(() => {
+    if (!isOpen) return;
+    setSelectedIds(new Set(initialSelectedIds));
   }, [isOpen, initialSelectedIds]);
 
   const filteredKeywords = useMemo(() => {
@@ -41,13 +49,23 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
   const handleAddNewKeyword = async () => {
     const keywordToAdd = newKeywordName.trim();
     if (!keywordToAdd) return;
+    setAddError('');
     try {
       const newKeywordData = await keywordsService.createKeyword(keywordToAdd);
-      const fullNewKeyword = { id: newKeywordData.id, keyword: keywordToAdd };
-      setAllKeywords(prev => [...prev, fullNewKeyword]);
+      const nuevoId = newKeywordData?.id;
+
+      // Sin id no se puede seleccionar la palabra (la seleccion se guarda por
+      // id), asi que en ese caso se relee la lista en vez de agregar una
+      // pastilla que no responderia al clic.
+      if (nuevoId == null) {
+        const data = await keywordsService.getKeywords();
+        setAllKeywords(data || []);
+      } else {
+        setAllKeywords(prev => [...prev, { id: nuevoId, keyword: keywordToAdd }]);
+      }
       setNewKeywordName('');
     } catch (error) {
-      alert('Error: La palabra clave ya existe o no se pudo agregar.');
+      setAddError(mensajeDeError(error, 'No se pudo agregar la palabra clave.'));
     }
   };
 
@@ -69,13 +87,21 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
       });
       setKeywordToDelete(null); 
     } catch (error) {
-      alert('No se pudo eliminar la palabra clave.');
+      setAddError(mensajeDeError(error, 'No se pudo eliminar la palabra clave.'));
       setKeywordToDelete(null);
     }
   };
 
+  // Se devuelven tambien los nombres: la caja "Palabras Clave" del formulario
+  // los necesita para reflejar la seleccion al instante. Antes solo se
+  // enviaban los ids y la caja seguia diciendo "Ninguna seleccionada" hasta
+  // que el reporte se guardaba y se volvia a leer del servidor.
   const handleSave = () => {
-    onSave(Array.from(selectedIds));
+    const ids = Array.from(selectedIds);
+    const names = ids
+      .map(id => allKeywords.find(k => k.id === id)?.keyword)
+      .filter(Boolean);
+    onSave({ ids, names });
     onClose();
   };
 
@@ -106,6 +132,7 @@ const KeywordsModal = ({ isOpen, onClose, onSave, initialSelectedIds = [] }) => 
             />
             <button type="button" className="btn-primary" onClick={handleAddNewKeyword}>Agregar</button>
           </div>
+          {addError && <span className="field-error" role="alert">{addError}</span>}
         </div>
         <div className="keyword-pill-container">
           {loading ? <p>Cargando...</p> : filteredKeywords.map(keyword => (

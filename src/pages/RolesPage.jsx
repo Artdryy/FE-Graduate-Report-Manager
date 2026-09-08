@@ -7,12 +7,14 @@ import Modal from '../components/common/Modal';
 import RoleForm from '../components/roles/RoleForm';
 import PermissionsModal from '../components/roles/PermissionsModal';
 import { useAuth } from '../context/AuthContext';
+import { mensajeDeError } from '../utils/apiError';
 
 const RolesPage = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState(null);
+  const [submitError, setSubmitError] = useState('');
   const { permissions } = useAuth();
 
   const can = useMemo(() => permissions['Roles']?.permissions || {}, [permissions]);
@@ -36,11 +38,13 @@ const RolesPage = () => {
   }, []);
 
   const handleAdd = () => {
+    setSubmitError('');
     setCurrentRole({ role_name: '', description: '' }); 
     setIsModalOpen(true);
   };
 
   const handleEdit = (role) => {
+    setSubmitError('');
     setCurrentRole(role);
     setIsModalOpen(true);
   };
@@ -59,6 +63,7 @@ const RolesPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentRole(null);
+    setSubmitError('');
   };
 
   const handleSubmit = async () => {
@@ -74,6 +79,7 @@ const RolesPage = () => {
       fetchRoles();
     } catch (error) {
       console.error("Failed to save role:", error);
+      setSubmitError(mensajeDeError(error, 'No se pudo guardar el rol.'));
     }
   };
   
@@ -157,6 +163,7 @@ const renderRoleActions = (role) => (
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}
+          error={submitError}
           title={currentRole && currentRole.id ? "Editar Rol" : "Agregar Rol"}
         >
           <RoleForm role={currentRole} setRole={setCurrentRole} />

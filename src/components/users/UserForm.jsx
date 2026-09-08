@@ -54,10 +54,14 @@ const UserForm = ({ user, setUser }) => {
       {isNewUser && (
         <div className="input-group">
           <label htmlFor="password">Contraseña</label>
+          {/* minLength espeja el minimo que exige el validador del backend
+              (users.validator.js). Sin el, una contraseña corta solo se
+              rechazaba en el servidor. */}
           <input
             type="password" id="password" name="password"
             className="modal-input" onChange={handleChange}
-            required={isNewUser}
+            required={isNewUser} minLength={8}
+            title="La contraseña debe tener al menos 8 caracteres"
           />
         </div>
       )}

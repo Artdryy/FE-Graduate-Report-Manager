@@ -8,6 +8,7 @@ import ReportForm from '../components/reports/ReportForm';
 import KeywordsModal from '../components/keywords/KeywordsModal';
 import { useAuth } from '../context/AuthContext';
 import { sortSemesters } from '../utils/semesters';
+import { mensajeDeError } from '../utils/apiError';
 
 
 const ReportsPage = () => {
@@ -19,6 +20,8 @@ const ReportsPage = () => {
   const [currentReport, setCurrentReport] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isKeywordsModalOpen, setIsKeywordsModalOpen] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [pdfError, setPdfError] = useState('');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false); 
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 15;
@@ -95,22 +98,37 @@ const ReportsPage = () => {
   
   const handleAdd = () => {
     setCurrentReport({
-      student_name: '', control_number: '', major: '', report_title: '', 
-      work_area: '', company_id: '', semester_id: '', keywords: [],
+      student_name: '', control_number: '', major: '', report_title: '',
+      work_area: '', company_id: '', semester_id: '', keywords: [], keyword_names: [],
     });
+    setSubmitError('');
     setIsReportModalOpen(true);
   };
 
-  const handleEdit = (report) => {
-    let keywordsArray = [];
-    if (report.keywords) {
-      if (typeof report.keywords === 'string') {
-        try { keywordsArray = JSON.parse(report.keywords); } catch (e) { console.error(e); }
-      } else if (Array.isArray(report.keywords)) {
-        keywordsArray = report.keywords;
+  // get_reports devuelve las palabras clave en dos columnas: keyword_ids para
+  // poder editarlas y keyword_names para mostrarlas. Antes solo llegaban los
+  // nombres, bajo la clave "keywords", y al editar se enviaban como si fueran
+  // ids.
+  const aArreglo = (valor) => {
+    if (Array.isArray(valor)) return valor;
+    if (typeof valor === 'string') {
+      try {
+        const analizado = JSON.parse(valor);
+        return Array.isArray(analizado) ? analizado : [];
+      } catch {
+        return [];
       }
     }
-    setCurrentReport({ ...report, keywords: keywordsArray });
+    return [];
+  };
+
+  const handleEdit = (report) => {
+    setCurrentReport({
+      ...report,
+      keywords: aArreglo(report.keyword_ids),
+      keyword_names: aArreglo(report.keyword_names),
+    });
+    setSubmitError('');
     setIsReportModalOpen(true);
   };
 
@@ -118,11 +136,20 @@ const ReportsPage = () => {
     setIsReportModalOpen(false);
     setCurrentReport(null);
     setSelectedFile(null);
+    setSubmitError('');
   };
 
-  const handleSaveKeywords = (keywordIds) => {
-    setCurrentReport(prev => ({ ...prev, keywords: keywordIds }));
+  // El modal devuelve ids y nombres: los ids se envian al servidor y los
+  // nombres alimentan la caja del formulario, que antes se quedaba en
+  // "Ninguna seleccionada" hasta que el reporte se guardaba y se releia.
+  const handleSaveKeywords = ({ ids, names }) => {
+    setCurrentReport(prev => ({ ...prev, keywords: ids, keyword_names: names }));
   };
+
+  const keywordsSeleccionadas = useMemo(
+    () => currentReport?.keywords || [],
+    [currentReport?.keywords]
+  );
 
   const handleDelete = async (report) => {
     if (window.confirm(`¿Está seguro de que quiere eliminar el informe "${report.report_title}"?`)) {
@@ -136,9 +163,26 @@ const ReportsPage = () => {
     }
   };
 
-  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+    setPdfError('');
+  };
 
   const handleSubmit = async () => {
+    setSubmitError('');
+    setPdfError('');
+
+    // El PDF vive en un input oculto que se dispara con un boton, asi que el
+    // navegador no puede pintarle su globo de validacion nativo como al resto
+    // de los campos: un control con display:none no recibe foco y Chrome se
+    // limita a avisar en la consola. El aviso lo damos nosotros, junto al
+    // campo.
+    if (!currentReport.id && !selectedFile) {
+      setPdfError('Debes adjuntar un archivo PDF.');
+      setSubmitError('Falta el archivo PDF del reporte.');
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('student_name', currentReport.student_name);
@@ -150,12 +194,11 @@ const ReportsPage = () => {
       formData.append('semester_id', currentReport.semester_id);
       formData.append('keywords', JSON.stringify(currentReport.keywords || []));
 
+      if (selectedFile) formData.append('pdf', selectedFile, selectedFile.name);
+
       if (currentReport.id) {
-        if (selectedFile) formData.append('pdf', selectedFile, selectedFile.name);
         await reportsService.updateReport(currentReport.id, formData);
       } else {
-        if (!selectedFile) throw new Error('Por favor, seleccione un archivo PDF');
-        formData.append('pdf', selectedFile, selectedFile.name);
         await reportsService.createReport(formData);
       }
       handleCloseReportModal();
@@ -163,6 +206,7 @@ const ReportsPage = () => {
       setReports(data || []);
     } catch (error) {
       console.error("Failed to save report:", error);
+      setSubmitError(mensajeDeError(error, 'No se pudo guardar el reporte.'));
     }
   };
 
@@ -312,12 +356,14 @@ const ReportsPage = () => {
           onSubmit={handleSubmit}
           title={currentReport?.id ? "Editar Reporte" : "Agregar Reporte"}
           className="report-modal-wrapper"
+          error={submitError}
         >
           <ReportForm
             report={currentReport}
             setReport={setCurrentReport}
             onFileChange={handleFileChange}
             onOpenKeywordsModal={() => setIsKeywordsModalOpen(true)}
+            fileError={pdfError}
           />
         </Modal>
       )}
@@ -325,7 +371,7 @@ const ReportsPage = () => {
         isOpen={isKeywordsModalOpen}
         onClose={() => setIsKeywordsModalOpen(false)}
         onSave={handleSaveKeywords}
-        initialSelectedIds={currentReport?.keywords || []}
+        initialSelectedIds={keywordsSeleccionadas}
       />
 
       <Modal
