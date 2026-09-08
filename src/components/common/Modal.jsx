@@ -7,6 +7,7 @@ const Modal = ({
   title,
   children,
   className,
+  error,
   submitLabel = "Guardar",
   submitClass = "btn-primary"
 }) => {
@@ -22,6 +23,10 @@ const Modal = ({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{title}</h2>
         <form onSubmit={handleFormSubmit}>
+          {/* Antes, cuando el servidor rechazaba el formulario, el error solo
+              se escribia en la consola: para el usuario el boton "no hacia
+              nada". Las paginas pasan aqui el mensaje del servidor. */}
+          {error && <p className="modal-error" role="alert">{error}</p>}
           <div className="modal-body">
             {children}
           </div>

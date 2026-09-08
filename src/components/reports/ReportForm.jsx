@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { companiesService } from '../../services/companiesService';
 import { semestersService } from '../../services/semestersService';
 
-const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) => {
+const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal, fileError }) => {
   const [companies, setCompanies] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const fileInputRef = useRef(null);
@@ -103,12 +103,31 @@ const ReportForm = ({ report, setReport, onFileChange, onOpenKeywordsModal }) =>
       </div>
 
       <div className="form-group">
-        <label>Archivo PDF</label>
-        <input type="file" ref={fileInputRef} onChange={handleActualFileChange} accept=".pdf" style={{ display: 'none' }} />
-        <button type="button" className="btn-secondary" onClick={() => fileInputRef.current.click()} style={{ width: '100%' }}>
+        <label htmlFor="pdf-reporte">Archivo PDF</label>
+        {/* El input real esta oculto y se dispara desde el boton, asi que el
+            navegador no puede pintar su globo de validacion nativo aqui: el
+            aviso de "falta el PDF" lo renderiza el formulario. */}
+        <input
+          type="file"
+          id="pdf-reporte"
+          ref={fileInputRef}
+          onChange={handleActualFileChange}
+          accept="application/pdf,.pdf"
+          style={{ display: 'none' }}
+        />
+        <button
+          type="button"
+          className="btn-secondary"
+          onClick={() => fileInputRef.current.click()}
+          style={{ width: '100%' }}
+          aria-describedby={fileError ? 'pdf-reporte-error' : undefined}
+        >
           Seleccionar PDF
         </button>
         <span className="file-name-display">{newFileName || currentFileName}</span>
+        {fileError && (
+          <span className="field-error" id="pdf-reporte-error" role="alert">{fileError}</span>
+        )}
       </div>
     </div>
   );

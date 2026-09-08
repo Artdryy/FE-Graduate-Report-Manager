@@ -91,6 +91,18 @@ const PermissionsModal = ({ role, onClose, onSaveSuccess }) => {
     >
       {loading && <p>Cargando...</p>}
       {error && <p className="error-message">{error}</p>}
+      {/* Sin este aviso, un problema del lado del servidor se veia como una
+          rejilla en blanco sin explicacion. Ocurria cuando la base de datos
+          conservaba la version vieja de get_permissions_for_role, que solo
+          devolvia los permisos ya concedidos: un rol nuevo no tenia ninguno.
+          desplegar.sh ya reaplica los procedimientos en cada despliegue, pero
+          el modal deja de mentir si vuelve a pasar. */}
+      {!loading && !error && Object.keys(groupedPermissions).length === 0 && (
+        <p className="no-data-message">
+          No hay módulos que mostrar para este rol. Revisa que la base de datos
+          tenga el catálogo de módulos y permisos.
+        </p>
+      )}
       {!loading && !error && (
         <div className="permissions-grid">
           {Object.entries(groupedPermissions).map(([moduleName, moduleData]) => (
